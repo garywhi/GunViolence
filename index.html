@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js" integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q==" crossorigin=""></script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Gun Violence</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/landing-page.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#about">Home</a>
+                    </li>
+                    <li>
+                        <a href="#services">Graphs</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+
+    <!-- Header -->
+    <a name="about"></a>
+    <div class="intro-header">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-message">
+                        <h1>Investigating Gun <br>Violence in America</h1>
+
+                        <hr class="intro-divider">
+                        <ul class="list-inline intro-social-buttons">
+                            <li>
+                                <a href="https://github.com/garywhi/GunViolence" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.intro-header -->
+
+    <!-- Page Content -->
+
+	<a  name="services"></a>
+	
+	    <div class="content-section-b">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Intro</h2>
+                    <p class="lead">On October 1, 2017, Stephen Paddock fired 1,100 rounds into a crowd at a 
+	             music festival on the Las Vegas Strip. Following the event that left 58 people dead 
+	             and 851 people injured, there was a national debate on whether gun laws should become 
+	             much more restrictive or whether people should arm themselves to protect themselves. 
+	             By visualizing gun violence data, we are better able to understand what should be done. Common sense argues
+		     that the more gun laws you have, the less number of incidents you would have.</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+	
+	
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Trend By Years</h2>
+                    <p class="lead">From the graph below, can observe that the number of gun violence incidents are increasing every year. There were about 51,000 incidents in the year 2014 and it has jumped up to
+                    around 60,000 in 2017. Though the data set we used was incomplete for 2018, if this trend continues we can expect it to have a slight increase from 2017.</p>
+                </div>
+                <div class="col-lg-12  col-sm-6" >
+                    <div id="incidentsbyyears"></div>
+                    <script>
+                    Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/incidentsbyyears.csv", function(err, rows){
+                      function unpack(rows, key) {
+                        return rows.map(function(row) { return row[key]; });
+                    }
+
+                    var data = [
+                      {
+                        x: unpack(rows, "Year"),
+                        y: unpack(rows, "Incidents"),
+                        type: "bar",
+                        marker:{
+                          color: ['rgba(32,63,182,0.6)', 'rgba(32,63,182,0.6)', 'rgba(32,63,182,0.6)', 'rgba(32,63,182,0.6)', 'rgba(255,102,17,0.6)']
+                        },
+                      }
+                    ];
+
+                    var layout = {
+                      title: "Number of Incidents by Year",
+                      hoverlabel: {
+                        font: {
+                          size: 15
+                        }
+                      },
+                      font: {
+                        family: "Helvetica",
+                        color: "#000000",
+                        size: 13
+                      },
+                      xaxis: {
+                        title: "Year"
+                      },
+                      yaxis: {
+                        title: "Number of Incidents"
+                      },
+                      paper_bgcolor: 'rgba(0,0,0,0)',
+                      plot_bgcolor: 'rgba(0,0,0,0)',
+                    };
+
+                    Plotly.newPlot('incidentsbyyears', data, layout, {displayModeBar: false, responsive: true});
+                    });
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Trend By Days</h2>
+                    <p class="lead">Looking at the incidents by days reveals that the highest number of incidents usually happen on New Years and Independece Day.
+                    The cause of this might be because people are firing their guns off to celebrate. Christmas day is also interesting because the number of incidents dip on that day
+                    every year, sometimes hitting all time lows for that year like in the case with the 2017 graph. </p>
+                    <ul class="lead">
+                      <li><b>January 1st, 2014</b> - Total Incidents : 216</li>
+                      <li><b>January 1st, 2015</b> - Total Incidents : 214</li>
+                      <li><b>January 1st, 2016</b> - Total Incidents : 221</li>
+                      <li><b>January 1st, 2017</b> - Total Incidents : 342</li>
+                    </ul>
+
+                    <ul class="lead">
+                      <li><b>July 4th, 2014</b> - Total Incidents : 192</li>
+                      <li><b>July 4th, 2015</b> - Total Incidents : 214</li>
+                      <li><b>July 4th, 2016</b> - Total Incidents : 224</li>
+                      <li><b>July 4th, 2017</b> - Total Incidents : 248</li>
+                    </ul>
+
+                    <ul class="lead">
+                      <li><b>December 25th, 2014</b> - Total Incidents : 87</li>
+                      <li><b>December 25th, 2015</b> - Total Incidents : 131</li>
+                      <li><b>December 25th, 2016</b> - Total Incidents : 154</li>
+                      <li><b>December 25th, 2017</b> - Total Incidents : 119</li>
+                    </ul>
+                </div>
+                <div class="col-lg-12 col-sm-6" >
+                    <div id="2014incidents"></div>
+                    <div id="2015incidents"></div>
+                    <div id="2016incidents"></div>
+                    <div id="2017incidents"></div>
+                    <script>
+                    //2014 INCIDENTS
+                    			Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/2014incidents.csv", function(err, rows){
+                    				function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    			}
+
+                    				var incidents = {
+                    					type: "scatter",
+                    					mode: "lines",
+                    					name: "indidents",
+                    					x: unpack(rows, "Date"),
+                    					y: unpack(rows, "Total Incidents"),
+                    					line: {color: "#0b8ba8"}
+                    				}
+                    				var chartData = [incidents];
+
+                    				var chartLayout = {
+                    					title: "Incidents by Day (2014)",
+                    					hoverlabel: {
+                    						font: {
+                    							size: 15
+                    						}
+                    					},
+                    					font: {
+                    						family: "Helvetica",
+                    						color: "#000000",
+                    						size: 13
+                    					},
+                    					xaxis: {
+                    						type: "date",
+                    						title: "Date"
+                    					},
+                    					yaxis: {
+                    						title: "Number of Incidents",
+                    						rangemode: "tozero",
+                    						showline: true,
+                    						zeroline: true}
+                    				};
+                    				Plotly.newPlot("2014incidents", chartData, chartLayout, {displayModeBar: false, responsive: true});
+                    			});
+
+                    //2015 INCIDENTS
+                    			Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/2015incidents.csv", function(err, rows){
+                    				function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    			}
+
+                    				var incidents = {
+                    					type: "scatter",
+                    					mode: "lines",
+                    					name: "indidents",
+                    					x: unpack(rows, "Date"),
+                    					y: unpack(rows, "Total Incidents"),
+                    					line: {color: "#67a80c"}
+                    				}
+                    				var chartData = [incidents];
+
+                    				var chartLayout = {
+                    					title: "Incidents by Day (2015)",
+                    					hoverlabel: {
+                    						font: {
+                    							size: 15
+                    						}
+                    					},
+                    					font: {
+                    						family: "Helvetica",
+                    						color: "#000000",
+                    						size: 13
+                    					},
+                    					xaxis: {
+                    						type: "date",
+                    						title: "Date"
+                    					},
+                    					yaxis: {
+                    						title: "Number of Incidents",
+                    						rangemode: "tozero",
+                    						showline: true,
+                    						zeroline: true}
+                    				};
+                    				Plotly.newPlot("2015incidents", chartData, chartLayout, {displayModeBar: false, responsive: true});
+                    			});
+
+                    //2016 Incidents
+                    			Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/2016incidents.csv", function(err, rows){
+                    				function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    			}
+                    				//Attack trace
+                    				var incidents = {
+                    					type: "scatter",
+                    					mode: "lines",
+                    					name: "indidents",
+                    					x: unpack(rows, "Date"),
+                    					y: unpack(rows, "Total Incidents"),
+                    					line: {color: "#a8650d"}
+                    				}
+                    				var chartData = [incidents];
+
+                    				var chartLayout = {
+                    					title: "Incidents by Day (2016)",
+                    					hoverlabel: {
+                    						font: {
+                    							size: 15
+                    						}
+                    					},
+                    					font: {
+                    						family: "Helvetica",
+                    						color: "#000000",
+                    						size: 13
+                    					},
+                    					xaxis: {
+                    						type: "date",
+                    						title: "Date"
+                    					},
+                    					yaxis: {
+                    						title: "Number of Incidents",
+                    						rangemode: "tozero",
+                    						showline: true,
+                    						zeroline: true}
+                    				};
+                    				Plotly.newPlot("2016incidents", chartData, chartLayout, {displayModeBar: false, responsive: true});
+                    			});
+                    //2017 INCIDENTS
+                    			Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/2017incidents.csv", function(err, rows){
+                    				function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    			}
+
+                    				var incidents = {
+                    					type: "scatter",
+                    					mode: "lines",
+                    					name: "indidents",
+                    					x: unpack(rows, "Date"),
+                    					y: unpack(rows, "Total Incidents"),
+                    					line: {color: "#ba0909"}
+                    				}
+                    				var chartData = [incidents];
+
+                    				var chartLayout = {
+                    					title: "Incidents by Day (2017)",
+                    					hoverlabel: {
+                    						font: {
+                    							size: 15
+                    						}
+                    					},
+                    					font: {
+                    						family: "Helvetica",
+                    						color: "#000000",
+                    						size: 13
+                    					},
+                    					xaxis: {
+                    						type: "date",
+                    						title: "Date"
+                    					},
+                    					yaxis: {
+                    						title: "Number of Incidents",
+                    						rangemode: "tozero",
+                    						showline: true,
+                    						zeroline: true}
+                    				};
+                    				Plotly.newPlot("2017incidents", chartData, chartLayout, {displayModeBar: false, responsive: true});
+                    			});
+                    </script>
+
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Most Common Gun Types</h2>
+                    <p class="lead">In all reported incidents where the type of gun used was known, handguns were the most common weapon. Although some of the biggest
+                    mass shootings in American history have invovled rifles, handguns are by far the more likely weapon to be used in gun violence incidents.
+                    Most guns used in reported incidents are handguns because they are more accessible and easily hidden.</p>
+                </div>
+                <div class="col-lg-12  col-sm-6" >
+                    <div id="guntype"></div>
+                    <script>
+                    Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/guntype.csv", function(err, rows){
+                    			function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    	}
+                    			//Header values
+                    			var headerNames = Plotly.d3.keys(rows[0]);
+                    			var headerValues = [headerNames[0], headerNames[1], headerNames[2]];
+                    			//Cell vaules
+                    			var cellValues = [];
+                    			for (i = 0; i < headerValues.length; i++) {
+                    					cellValue = unpack(rows, headerValues[i]);
+                    					cellValues[i] = cellValue;
+                    			}
+                    			var colors = ["#e845b7", "#45b1e8", "#e8af45" ]
+
+                    			//Set values to last item in array
+                    			var shotgun = [];
+                    			shotgun = cellValues[0].pop();
+
+                    			var rifle = [];
+                    			rifle = cellValues[1].pop();
+
+                    			var handgun = [];
+                    			handgun = cellValues[2].pop();
+
+                    			var data = [{
+                    				values: [shotgun, rifle, handgun],
+                    				labels: ["Shotgun", "Rifle", "Handgun"],
+                    				type: "pie",
+                    					name: "Types of Guns with Percentages",
+                    					hoverinfo: "percent",
+                    					marker: {
+                    							colors: colors,
+                    									line: {
+                    											color: "#000000",
+                    											width: "1"
+                    									}
+                    					}
+                    			}];
+                    			var layout = {
+                    					title: "Percentage of Gun Types Used",
+                    					font: {
+                    							family: "Helvetica",
+                    							color: "#000000",
+                    							size: 13
+                    					},
+                    					hoverlabel:{
+                    							font: {
+                    									family: "Helvetica",
+                    									size: 15
+                    							}
+                    					},
+                              paper_bgcolor: 'rgba(0,0,0,0)',
+                              plot_bgcolor: 'rgba(0,0,0,0)',
+                    			};
+                    			Plotly.newPlot("guntype", data, layout, {displayModeBar: false, responsive: true});
+                    	});
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Incidents By State</h2>
+                    <p class="lead">From the past 4 years, Illinoies has the most number of incidents hovering around 17,000. California is a close second,
+                    with about 16,000 incidents. Flordia and Texas are the next ones that stand out with around 15,000 and 13,000 incidents respectively. Hawaii boast
+                    the least amount of incidents in the nation with only 289 in the past 4 year.</p>
+                </div>
+                <div class="col-lg-12  col-sm-6" >
+                    <div id="incidentsbystate"></div>
+                    <script>
+                    Plotly.d3.csv('https://raw.githubusercontent.com/garywhi/GunViolence/master/2017incidentsbystate.csv', function(err, rows){
+              			      function unpack(rows, key) {
+              			          return rows.map(function(row) { return row[key]; });
+              			      }
+
+              			      var data = [{
+              			          type: 'choropleth',
+              			          locationmode: 'USA-states',
+              			          locations: unpack(rows, 'Abbreviations'),
+              			          z: unpack(rows, 'Incidents 2014-2018'),
+              			          text: unpack(rows, 'State'),
+              			          zmin: 0,
+              			          zmax: 17000,
+              			          colorbar: {
+              			              //title: 'Number of Incidents',
+              			              //thickness: 0.2
+              			          },
+              			          marker: {
+              			              line:{
+              			                  //color: 'rgb(255,255,255)',
+              			                  width: 1
+              			              }
+              			          },
+              			      }];
+
+
+              			      var layout = {
+              			          title: 'Number of Incidents per State (2014-2018)',
+              			          geo:{
+              			              scope: 'usa',
+              			          },
+              								//width: 1700,
+              				        height: 700,
+              								hoverlabel: {
+              									font: {
+              										size: 15
+              									}
+              								},
+              								font: {
+              									family: "Helvetica",
+              									color: "#000000",
+              									size: 13
+              								},
+                              paper_bgcolor: 'rgba(0,0,0,0)',
+                              plot_bgcolor: 'rgba(0,0,0,0)',
+              			      };
+
+              			      Plotly.newPlot("incidentsbystate", data, layout, {displayModeBar: false, responsive: true});
+              			});
+			    
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Deaths By Population</h2>
+                    <p class="lead">Alaska is by far the least densely populated state, but it does have the highest number of deaths per 100,000 people.
+                    What's interesting is that although California is one of the leading states with the most number of incidents, they have a
+                    considerably low death rate at around 8 per 100,000. The other 3 leading states with the most number of incidents, Illinoies,
+                    Texas, and Flordia, has a death rate hovering around 11 - 12 per 100,000. You are far more likely to die from gun violence in Alaska
+		    than any of the top leading incident states.</p>
+                </div>
+                <div class="col-lg-12  col-sm-6" >
+                    <div id="100k"></div>
+                    <script>
+                    Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/2017100k.csv", function(err, rows){
+                    				function unpack(rows, key) {
+                    					return rows.map(function(row) { return row[key]; });
+                    			}
+
+                    			var data = [
+                    				{
+                    					x: unpack(rows, "State"),
+                    					y: unpack(rows, "Deaths Per 100k"),
+                    					type: "bar",
+                    					marker:{
+                    						color: 'rgba(255,100,100,0.8)',
+                    					},
+                    				}
+                    			];
+
+                    			var layout = {
+                    				title: "Deaths per 100k by State",
+                    				hoverlabel: {
+                    					font: {
+                    						size: 15
+                    					}
+                    				},
+                    				font: {
+                    					family: "Helvetica",
+                    					color: "#000000",
+                    					size: 13
+                    				},
+                    				xaxis: {
+                    					title: "State",
+                    				},
+                    				yaxis: {
+                    					title: "Number of Incidents"
+                    				},
+                            paper_bgcolor: 'rgba(0,0,0,0)',
+                            plot_bgcolor: 'rgba(0,0,0,0)',
+                    			};
+
+                    			Plotly.newPlot('100k', data, layout, {displayModeBar: false, responsive: true});
+                    			});
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <div class="content-section-b">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Gun Laws vs Incidents</h2>
+                    <p class="lead">California has the most number of gun laws in the nation, but it doesn't seem to help to keep incident numbers down.
+                    This might seem like it is not a safe place, but from the last chart we saw it is a relatively safe place. Flordia and Texas are the other two leading states
+	            with the most number of incidents but they have about 40 less gun laws than Illinoies and about 80 less than California but the number of incidents are 
+	            are roughly the same. There are many states across the nation with a much lower number of gun laws but still manages to have fewer incident.
+		    The cause of this could be that the top incident states might have a problem with illegally owned guns which circumvent gun ownership laws.</p>
+                </div>
+                <div class="col-lg-12  col-sm-6" >
+                    <div id="gunlaws"></div>
+		    <div id="gunlawsmap"></div>
+                    <script>
+                    Plotly.d3.csv("https://raw.githubusercontent.com/garywhi/GunViolence/master/gunlaws.csv", function(err, rows){
+              			            function unpack(rows, key) {
+              			                return rows.map(function(row) { return row[key]; });
+              			        }
+
+              	            var incidents = {
+              	              type: "scatter",
+              	              mode: "markers+text",
+              	              name: "indidents",
+              	              x: unpack(rows, "Number of Gun Laws"),
+              	              y: unpack(rows, "Incidents"),
+              	              textposition: 'top center',
+              	              text: unpack(rows, "Abb"),
+              	              line: {color: "#0b8ba8"}
+              	            }
+              	            var chartData = [incidents];
+
+              	            var chartLayout = {
+              	                title: "Number of Gun Laws vs Incidents",
+              	                hoverlabel: {
+              	                    font: {
+              	                        size: 15
+              	                    }
+              	                },
+              	                font: {
+              	                    family: "Helvetica",
+              	                    color: "#000000",
+              	                    size: 13
+              	                },
+              	                xaxis: {
+              	                    //type: "date",
+              	                    title: "Number of Gun Laws"
+              	                },
+              	                yaxis: {
+              	                    title: "Number of Incidents",
+              	                    rangemode: "tozero",
+              	                    //showline: true,
+              	                    zeroline: true}
+              	            };
+              	            Plotly.newPlot("gunlaws", chartData, chartLayout, {displayModeBar: false, responsive: true});
+                      });
+		
+			    Plotly.d3.csv('https://raw.githubusercontent.com/garywhi/GunViolence/master/gunlaws.csv', function(err, rows){
+              			      function unpack(rows, key) {
+              			          return rows.map(function(row) { return row[key]; });
+              			      }
+
+              			      var data = [{
+              			          type: 'choropleth',
+              			          locationmode: 'USA-states',
+              			          locations: unpack(rows, 'Abb'),
+              			          z: unpack(rows, 'Number of Gun Laws'),
+              			          text: unpack(rows, 'State'),
+              			          zmin: 0,
+              			          zmax: 110,
+					  colorscale: [
+					  	[0, 'rgb(214, 200, 218)'], [0.2, 'rgb(171, 169, 197)'],
+					  	[0.4, 'rgb(128, 139, 177)'], [0.6, 'rgb(99, 121, 171)'],
+					  	[0.8, 'rgb(42, 78, 137)'], [1, 'rgb(0, 48, 150)']
+					  ],
+              			          colorbar: {
+              			              //title: 'Number of Gun Laws',
+              			              //thickness: 0.2
+              			          },
+              			          marker: {
+              			              line:{
+              			                  //color: 'rgb(255,255,255)',
+              			                  width: 1
+              			              }
+              			          },
+              			      }];
+
+
+              			      var layout = {
+              			          title: 'Number of Gun Laws per State',
+              			          geo:{
+              			              scope: 'usa',
+              			          },
+              								//width: 1700,
+              				        height: 700,
+              								hoverlabel: {
+              									font: {
+              										size: 15
+              									}
+              								},
+              								font: {
+              									family: "Helvetica",
+              									color: "#000000",
+              									size: 13
+              								},
+                              paper_bgcolor: 'rgba(0,0,0,0)',
+                              plot_bgcolor: 'rgba(0,0,0,0)',
+              			      };
+
+              			      Plotly.newPlot("gunlawsmap", data, layout, {displayModeBar: false, responsive: true});
+              			});
+                    </script>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+	
+		    <div class="content-section-a">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Conclusion</h2>
+                    <p class="lead">In conclusion, it’s hard to clearly state that a higher amount of gun laws 
+		correlates to less gun violence. We can see from the data that out of the top four states 
+		with gun incidents, that the amount of gun laws is spread across the board. Another interesting
+	fact that we found from the data, is the number of incidents does not necessarily determine the “risk” factor of a location.
+We found that the top four states are on the lower half of deaths per capita. If we were to address the largest issues in gun violence, 
+			  the data shows that we should most likely focus on improving gun laws in regard to handguns as well 
+			    as working on methods to prevent illegally owned guns that circumvent the system. Without making changes, it
+			    looks certain that the amount of gun violence will continue to trend upwards.</p>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+
+  
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
